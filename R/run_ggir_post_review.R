@@ -3,7 +3,8 @@
 #' This is the main entry point for the package. It discovers GGIR output files,
 #' creates a run manifest, audits the GGIR config, combines Part 4 night summaries,
 #' applies sleep QC rules, detects candidate secondary sleep periods from SIB
-#' reports, and writes review-ready CSV outputs.
+#' reports, derives provisional nap-inclusive sleep metrics, and writes
+#' review-ready CSV outputs.
 #'
 #' @param ggir_output_dir Path to a completed GGIR output directory.
 #' @param out_dir Output directory for post-review files.
@@ -40,6 +41,13 @@ run_ggir_post_review <- function(ggir_output_dir,
   cli::cli_alert_info("Detecting candidate secondary sleep periods from SIB reports")
   sleep_candidates <- detect_sleep_candidates_from_sib(manifest, nights = nights, config = config)
 
+  cli::cli_alert_info("Deriving provisional nap-inclusive sleep metrics")
+  nap_inclusive_sleep <- derive_nap_inclusive_sleep(
+    nights = nights,
+    sleep_candidates = sleep_candidates,
+    min_confidence = config$candidate_sleep$min_confidence_for_review
+  )
+
   cli::cli_alert_info("Applying sleep QC rules")
   night_flags <- apply_sleep_qc_rules(nights, sleep_candidates = sleep_candidates, config = config)
 
@@ -49,12 +57,14 @@ run_ggir_post_review <- function(ggir_output_dir,
   nights_path <- file.path(out_dir, "combined_nights.csv")
   flags_path <- file.path(out_dir, "night_flags.csv")
   candidates_path <- file.path(out_dir, "sleep_candidates.csv")
+  nap_inclusive_path <- file.path(out_dir, "nap_inclusive_sleep.csv")
   recommendations_path <- file.path(out_dir, "review_recommendations.csv")
   queue_path <- file.path(out_dir, "manual_review_queue.csv")
 
   readr::write_csv(nights, nights_path)
   readr::write_csv(night_flags, flags_path)
   readr::write_csv(sleep_candidates, candidates_path)
+  readr::write_csv(nap_inclusive_sleep, nap_inclusive_path)
   readr::write_csv(recommendations, recommendations_path)
 
   review_queue <- night_flags |>
@@ -71,6 +81,7 @@ run_ggir_post_review <- function(ggir_output_dir,
     parameter_audit = parameter_audit,
     nights = nights,
     sleep_candidates = sleep_candidates,
+    nap_inclusive_sleep = nap_inclusive_sleep,
     night_flags = night_flags,
     recommendations = recommendations,
     paths = list(
@@ -78,6 +89,7 @@ run_ggir_post_review <- function(ggir_output_dir,
       parameter_audit = parameter_audit_path,
       combined_nights = nights_path,
       sleep_candidates = candidates_path,
+      nap_inclusive_sleep = nap_inclusive_path,
       night_flags = flags_path,
       review_recommendations = recommendations_path,
       manual_review_queue = queue_path
