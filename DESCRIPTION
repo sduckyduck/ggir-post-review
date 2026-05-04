@@ -1,0 +1,31 @@
+Package: ggirpostreview
+Title: Post-Processing and Quality Control Tools for GGIR Outputs
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Qiyun", "Huang", email = "", role = c("aut", "cre"))
+  )
+Description: Organizes GGIR output folders, combines night-level files, audits run parameters, applies sleep quality-control rules, identifies suspicious sleep periods, and generates review-ready outputs for actigraphy research workflows.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends:
+    R (>= 4.1.0)
+Imports:
+    cli,
+    dplyr,
+    fs,
+    glue,
+    lubridate,
+    purrr,
+    readr,
+    rlang,
+    stringr,
+    tibble,
+    tidyr,
+    yaml
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
