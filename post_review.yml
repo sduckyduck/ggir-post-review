@@ -1,0 +1,25 @@
+study:
+  timezone: "America/New_York"
+  day_window: "noon_to_noon"
+  min_valid_nights: 3
+
+qc_thresholds:
+  very_short_spt_hours: 2
+  very_long_spt_hours: 14
+  very_short_sleep_hours: 1
+  very_long_sleep_hours: 12
+  low_sleep_efficiency_pct: 65
+  high_sleep_efficiency_pct: 98
+  high_waso_minutes: 180
+  high_nonwear_fraction_spt: 0.20
+
+candidate_sleep:
+  min_duration_minutes: 30
+  merge_gap_minutes: 20
+  min_confidence_for_review: 0.60
+  include_daytime_naps: true
+
+review:
+  generate_html: true
+  generate_pdf: false
+  include_only_flagged_nights: false
