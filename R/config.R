@@ -13,7 +13,9 @@ load_review_config <- function(config_file = NULL) {
       low_sleep_efficiency_pct = 65,
       high_sleep_efficiency_pct = 98,
       high_waso_minutes = 180,
-      high_nonwear_fraction_spt = 0.20
+      high_nonwear_fraction_spt = 0.20,
+      high_invalid_fraction_night = 0.20,
+      high_waking_sib_hours_atleast15min = 2
     ),
     candidate_sleep = list(
       min_duration_minutes = 30,
