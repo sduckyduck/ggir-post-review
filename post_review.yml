@@ -12,6 +12,8 @@ qc_thresholds:
   high_sleep_efficiency_pct: 98
   high_waso_minutes: 180
   high_nonwear_fraction_spt: 0.20
+  high_invalid_fraction_night: 0.20
+  high_waking_sib_hours_atleast15min: 2
 
 candidate_sleep:
   min_duration_minutes: 30
